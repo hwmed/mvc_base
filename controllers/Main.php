@@ -2,10 +2,11 @@
 
 namespace controllers;
 
-class Main
+class Main extends \controllers\controller
 {
     public function index()
     {
-        echo "hello world";
+        $view = $this->loadView();
+        $view->start("index");
     }
 }
