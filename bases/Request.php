@@ -86,6 +86,7 @@ class Request extends Base
         
         try{
             $obj = $this->create("controllers" , $this->className);
+            
             if(method_exists($obj , $this->methodName))
             {
                 if(is_null($this->dataArray))
