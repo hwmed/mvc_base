@@ -13,7 +13,15 @@ abstract class Base
         if(file_exists($dir))
         {
             $obj = '\\' . $nameSpace . '\\' . $className;
+            $checkObj = new \ReflectionClass($obj);
+
+            if($checkObj->isAbstract())
+            {
+                throw new \Exception("class is abstract");
+            }
+
             $obj = new $obj;
+
             return $obj;
         }
         else
