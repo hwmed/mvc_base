@@ -4,34 +4,30 @@ namespace bases;
 
 class BaseModel extends Base
 {
-    protected  $mysqli;
-    private $error_reporting = true;
+    protected  $pdo;
+    private $error_reporting = 1;
 
     public function __construct()
     {
         global $config;
 
-        $this->mysqli = new \mysqli($config['db_host'] ,$config['db_user'] ,$config['db_pass'] ,$config['db_name']);
-
-        $this->mysqli->set_charset("utf8");
+        try{
+            $this->pdo = new \PDO("mysql:host=". $config['db_host'] .";dbname=" . $config['db_name'],$config['db_user'],$config['db_pass']);
+            $this->pdo->exec('set names utf8');
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        }
+        catch(\PDOException $e)
+        {
+            $this->showErr($e);
+        }
     }
 
-    protected function query($query)
+    private function showErr($e)
     {
-        $resault = $this->mysqli->query($query);
-
-        if($resault)
-        {
-            $arr = array();
-
-            while($fetch = $resault->fetch_object())
-                $arr[] = $fetch;
-
-            return $arr;
-        }
+        if($this->error_reporting)
+            $this->debug($e->getMessage());
         else
-        {
-            throw new \Exception("query faild! DB err Massse: " . $this->mysqli->error);
-        }
+            $this->debug("app stoped!!!");
     }
 }
