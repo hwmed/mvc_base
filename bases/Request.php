@@ -111,24 +111,31 @@ class Request extends Base
             }
             else
             {
-                call_user_func_array(
-                    array(
-                        $obj,
-                        "index"
-                    ),
-                    array($this->methodName)
-                );
+                    call_user_func_array(
+                        array(
+                            $obj,
+                            "index"
+                        ),
+                        array($this->methodName)
+                    );
             }
         }
         catch(\Exception $ex)
-        {
-            $obj = $this->create("controllers" , $config['def_error_class']);
-            call_user_func(
-                array(
-                    $obj,
-                    "index"
-                )
-            );
+        {   
+            if(!$this->error_reporting)
+            {
+                $obj = $this->create("controllers" , $config['def_error_class']);
+                call_user_func(
+                    array(
+                        $obj,
+                        "index"
+                    )
+                );
+            }
+            else
+            {
+                $this->debug($ex);
+            }
         }
     }
 }

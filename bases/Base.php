@@ -4,6 +4,8 @@ namespace bases;
 
 abstract class Base
 {
+    
+    protected $error_reporting = 1;
 
     protected function create($nameSpace , $className)
     {

@@ -4,6 +4,7 @@ namespace models;
 
 abstract class Model extends \bases\BaseModel
 {
+
     public function query($query)
     { 
         try
@@ -26,9 +27,42 @@ abstract class Model extends \bases\BaseModel
         }
     }
 
-    abstract public function insert();
-    abstract public function select();
+    public function insert($arr = null)
+    {
+        
+        if(!is_array($arr))
+            throw new \Exception("insert value is not array");
+
+        if(count($arr) != 5)
+            throw new \Exception("article model given 5 fields");
+
+        $query = 'INSERT INTO article
+        ()
+        VALUES (null,';
+
+        for($i = 1; $i <= $this->fieldsCount; $i++)
+        {
+            $query .= " ? ";
+            if($i != $this->fieldsCount)
+                $query .= ",";
+        }
+        $query .= ')';
+
+        try
+        {
+            $prepare = $this->pdo->prepare($query);
+            $prepare->execute($arr);
+        }
+        catch(\PDOException $e)
+        {
+            $this->showErr($e);
+        }
+        
+        return true;
+    }
+
     abstract public function rowExist();
     abstract public function update();
     abstract public function delete();
+
 }

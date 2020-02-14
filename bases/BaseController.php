@@ -10,13 +10,13 @@ abstract class BaseController extends \bases\Base
         return $obj;
     }
 
-    protected function loadModel($modelName)
+    protected function loadModel($modelName , $tableName)
     {
         global $config;
         if(file_exists($config['root'] . "models/" . $modelName . ".php"))
         {
             $class = "\\models\\" . $modelName;
-            $obj = new $class;
+            $obj = new $class($tableName);
             return $obj;
         }
         else
