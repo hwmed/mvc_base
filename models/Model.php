@@ -61,8 +61,27 @@ abstract class Model extends \bases\BaseModel
         return true;
     }
 
+    public function exec($query)
+    {
+        try
+        {
+            $prepare = $this->pdo->prepare($query);
+            $prepare->execute($arr);
+        }
+        catch(\PDOException $e)
+        {
+            $this->showErr($e);
+        }
+    }
+
+    public function drop($rowId)
+    {
+        $query = "drop from " . $this->tableName . " where id = " . $rowId;
+
+        $this->exec($query);
+    }
+
     abstract public function rowExist();
-    abstract public function update();
     abstract public function delete();
 
 }

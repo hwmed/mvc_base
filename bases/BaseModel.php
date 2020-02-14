@@ -31,8 +31,6 @@ abstract class BaseModel extends Base
     {
         if($this->error_reporting)
             $this->debug($e->getMessage());
-        else
-            $this->debug("app stoped!!!");
     }
     
     private function fields_count()
